@@ -12,6 +12,42 @@ void DFT (node * root)
 {
 	// Implement DFS
 	// Hint: You can use print_node, print_tree and/or print_stack.
+
+  stack s;
+
+  s.node = root;
+  s.next = NULL;
+
+  while(!isEmpty(&root->num))
+  {
+    if (root->lchild != NULL && root->rchild != NULL)
+    {
+      print_node (root);
+      pop(&s);
+      push(&s,root->rchild);
+      push(&s,root->lchild);
+    }
+
+    else if (root->lchild == NULL && root->rchild != NULL)
+    {
+      print_node (root);
+      pop(&s);
+      push(&s, root->rchild);
+    }
+
+    else if (root->lchild != NULL && root->rchild == NULL)
+    {
+      print_node (root);
+      pop(&s);
+      push(&s, root->lchild);
+    }
+
+    else
+    {
+      print_node (root);
+      pop(&s);
+    }
+  }
 }
 
 node *make_node (int num, node * left, node * right)
@@ -58,11 +94,22 @@ void print_tree (node * p, int depth)
 
 stack *push (stack * topp, node * node)
 {
-	return 0;
+
+  stack *new_top = topp;
+  stack *s = malloc(sizeof(stack));
+  s->node = node;
+  s->next = new_top;
+  topp->next = new_top;
+
 }
 
 bool isEmpty (stack * topp)
 {
+  if(topp == NULL)
+  {
+    return true;
+  }
+  else 
   return false;
 }
 
@@ -71,12 +118,17 @@ node *top (stack * topp)
 	return 0;
 }
 
-// Utility function to pop topp  
+// Utility function to pop top  
 // element from the stack 
 
 stack *pop (stack * topp)
 {
-	return 0;
+	stack *freeing = topp;
+  int popped_top = topp->node->num;
+  topp = topp->next;
+
+  free(freeing);
+  return popped_top;
 }
 
 void print_stack (stack * topp)
